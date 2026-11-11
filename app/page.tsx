@@ -10,15 +10,22 @@ export default async function HomePage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const resolvedParams = await searchParams;
-  const cookieStore = await cookies();
-  const settings = await getVehicleSettings();
+  let isAuthorized = false;
+  let settings = await getVehicleSettings();
 
-  const isQr = resolvedParams.src === 'qr' || resolvedParams.qr === '1';
-  const hasAuthCookie =
-    cookieStore.get('fmkal_qr_authorized')?.value === 'true' ||
-    cookieStore.has('admin_session');
-  const isAuthorized = isQr || Boolean(hasAuthCookie) || settings.qrOnlyAccess === false;
+  try {
+    const resolvedParams = await searchParams;
+    const cookieStore = await cookies();
+    const isQr = resolvedParams?.src === 'qr' || resolvedParams?.qr === '1';
+    const hasAuthCookie =
+      cookieStore.get('fmkal_qr_authorized')?.value === 'true' ||
+      cookieStore.has('fmkal_admin_token') ||
+      cookieStore.has('admin_session');
+    isAuthorized = isQr || Boolean(hasAuthCookie) || settings.qrOnlyAccess === false;
+  } catch (err) {
+    console.error('[HOMEPAGE] Error resolving params/cookies:', err);
+    isAuthorized = settings.qrOnlyAccess === false;
+  }
 
   return (
     <VehicleContactClient

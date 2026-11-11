@@ -46,21 +46,47 @@ export const DEFAULT_SETTINGS: VehicleSettingsData = {
   qrOnlyAccess: true,
 };
 
-export async function getVehicleSettings() {
-  let settings = await prisma.vehicleContactSettings.findUnique({
-    where: { id: 'default' },
-  });
-
-  if (!settings) {
-    settings = await prisma.vehicleContactSettings.create({
-      data: {
-        id: 'default',
-        ...DEFAULT_SETTINGS,
-      },
+export async function getVehicleSettings(): Promise<VehicleSettingsData> {
+  try {
+    let settings = await prisma.vehicleContactSettings.findUnique({
+      where: { id: 'default' },
     });
-  }
 
-  return settings;
+    if (!settings) {
+      settings = await prisma.vehicleContactSettings.create({
+        data: {
+          id: 'default',
+          ...DEFAULT_SETTINGS,
+        },
+      });
+    }
+
+    return {
+      carModel: settings.carModel ?? DEFAULT_SETTINGS.carModel,
+      licensePlate: settings.licensePlate ?? DEFAULT_SETTINGS.licensePlate,
+      status: settings.status ?? DEFAULT_SETTINGS.status,
+      statusText: settings.statusText ?? DEFAULT_SETTINGS.statusText,
+      headline: settings.headline ?? DEFAULT_SETTINGS.headline,
+      greeting: settings.greeting ?? DEFAULT_SETTINGS.greeting,
+      subGreeting: settings.subGreeting ?? DEFAULT_SETTINGS.subGreeting,
+      bodyText: settings.bodyText ?? DEFAULT_SETTINGS.bodyText,
+      footerNote: settings.footerNote ?? DEFAULT_SETTINGS.footerNote,
+      footerBranding: settings.footerBranding ?? DEFAULT_SETTINGS.footerBranding,
+      phoneEnabled: settings.phoneEnabled ?? DEFAULT_SETTINGS.phoneEnabled,
+      phoneNumber: settings.phoneNumber ?? DEFAULT_SETTINGS.phoneNumber,
+      whatsAppEnabled: settings.whatsAppEnabled ?? DEFAULT_SETTINGS.whatsAppEnabled,
+      whatsAppNumber: settings.whatsAppNumber ?? DEFAULT_SETTINGS.whatsAppNumber,
+      whatsAppMessage: settings.whatsAppMessage ?? DEFAULT_SETTINGS.whatsAppMessage,
+      kakaoTalkEnabled: settings.kakaoTalkEnabled ?? DEFAULT_SETTINGS.kakaoTalkEnabled,
+      kakaoTalkUrl: settings.kakaoTalkUrl ?? DEFAULT_SETTINGS.kakaoTalkUrl,
+      vehicleImageUrl: settings.vehicleImageUrl ?? DEFAULT_SETTINGS.vehicleImageUrl,
+      baseUrl: settings.baseUrl ?? DEFAULT_SETTINGS.baseUrl,
+      qrOnlyAccess: (settings as any).qrOnlyAccess ?? DEFAULT_SETTINGS.qrOnlyAccess,
+    };
+  } catch (error) {
+    console.error('[SETTINGS] Error in getVehicleSettings, falling back safely to defaults:', error);
+    return DEFAULT_SETTINGS;
+  }
 }
 
 export async function updateVehicleSettings(data: Partial<VehicleSettingsData>) {

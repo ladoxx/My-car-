@@ -31,6 +31,24 @@ function createPrismaClient() {
 
 export const prisma = globalForPrisma.prisma || createPrismaClient();
 
+// Auto-heal schema differences (e.g. newly added columns in existing SQLite files)
+async function autoHealDatabase() {
+  try {
+    const cols = await prisma.$queryRawUnsafe<any[]>(`PRAGMA table_info(VehicleContactSettings)`);
+    if (Array.isArray(cols) && cols.length > 0) {
+      const hasCol = cols.some((c: any) => c.name === 'qrOnlyAccess');
+      if (!hasCol) {
+        console.log('[FMKAL DB] Auto-healing: Adding missing column qrOnlyAccess...');
+        await prisma.$executeRawUnsafe(`ALTER TABLE VehicleContactSettings ADD COLUMN qrOnlyAccess BOOLEAN DEFAULT 1`);
+      }
+    }
+  } catch {
+    // Silently continue if table does not exist yet
+  }
+}
+
+autoHealDatabase().catch(() => {});
+
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
