@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { verifyPassword, signAdminToken, COOKIE_NAME } from '@/lib/auth';
+import { verifyPassword, signAdminToken, hashPassword, COOKIE_NAME } from '@/lib/auth';
 import { isRateLimited, recordLoginAttempt } from '@/lib/rateLimit';
 
 export async function POST(req: NextRequest) {
@@ -23,9 +23,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Username and password are required' }, { status: 400 });
     }
 
-    const user = await prisma.adminUser.findUnique({
+    let user = await prisma.adminUser.findUnique({
       where: { username },
+    }).catch(async (dbErr) => {
+      console.error('[LOGIN] Database findUnique error:', dbErr);
+      return null;
     });
+
+    // Auto-seed admin user if database is fresh or empty
+    if (!user) {
+      const adminCount = await prisma.adminUser.count().catch(() => 0);
+      if (adminCount === 0 && (username === 'admin' || username === (process.env.ADMIN_USERNAME || 'admin'))) {
+        const defaultPassword = process.env.ADMIN_PASSWORD || 'admin1234!';
+        if (password === defaultPassword) {
+          const passwordHash = await hashPassword(defaultPassword);
+          user = await prisma.adminUser.create({
+            data: {
+              username,
+              passwordHash,
+            },
+          }).catch(() => null);
+        }
+      }
+    }
 
     if (!user) {
       await recordLoginAttempt(ip, false);
@@ -64,8 +84,11 @@ export async function POST(req: NextRequest) {
     });
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error', details: error?.message || String(error) },
+      { status: 500 }
+    );
   }
 }
