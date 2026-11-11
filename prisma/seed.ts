@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { prisma } from '../lib/db';
 import { hashPassword } from '../lib/auth';
 import { DEFAULT_SETTINGS } from '../lib/settings';
@@ -7,13 +8,14 @@ async function main() {
 
   // Ensure default admin user
   const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin1234!';
+  const configuredPassword = process.env.ADMIN_PASSWORD;
 
   const existingAdmin = await prisma.adminUser.findUnique({
     where: { username: adminUsername },
   });
 
   if (!existingAdmin) {
+    const adminPassword = configuredPassword || 'Ray2026!' + crypto.randomBytes(4).toString('hex');
     const passwordHash = await hashPassword(adminPassword);
     await prisma.adminUser.create({
       data: {
@@ -21,7 +23,11 @@ async function main() {
         passwordHash,
       },
     });
-    console.log(`Created default admin user: ${adminUsername}`);
+    console.log(`[FMKAL SECURITY] Created admin user: ${adminUsername}`);
+    if (!configuredPassword) {
+      console.log(`[FMKAL SECURITY] Temporary generated password: ${adminPassword}`);
+      console.log(`[FMKAL SECURITY] Please change it in /admin settings immediately.`);
+    }
   } else {
     console.log(`Admin user ${adminUsername} already exists.`);
   }

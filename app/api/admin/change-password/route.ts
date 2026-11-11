@@ -18,9 +18,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (newPassword.length < 6) {
+    if (newPassword.length < 8) {
       return NextResponse.json(
-        { error: 'New password must be at least 6 characters long' },
+        { error: 'Yeni şifre en az 8 karakter uzunluğunda olmalıdır (New password must be at least 8 characters).' },
+        { status: 400 }
+      );
+    }
+
+    if (currentPassword === newPassword) {
+      return NextResponse.json(
+        { error: 'Yeni şifre mevcut şifre ile aynı olamaz (New password must differ from current password).' },
         { status: 400 }
       );
     }

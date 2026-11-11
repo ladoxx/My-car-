@@ -5,7 +5,9 @@ import { isRateLimited, recordLoginAttempt } from '@/lib/rateLimit';
 
 export async function POST(req: NextRequest) {
   try {
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || '127.0.0.1';
+    const forwarded = req.headers.get('x-forwarded-for');
+    const realIp = req.headers.get('x-real-ip');
+    const ip = (forwarded ? forwarded.split(',')[0].trim() : realIp) || '127.0.0.1';
 
     // Check rate limit
     if (await isRateLimited(ip)) {
@@ -51,10 +53,11 @@ export async function POST(req: NextRequest) {
     });
 
     const isProd = process.env.NODE_ENV === 'production';
+    const isHttps = req.nextUrl.protocol === 'https:' || req.headers.get('x-forwarded-proto') === 'https';
 
     response.cookies.set(COOKIE_NAME, token, {
       httpOnly: true,
-      secure: isProd,
+      secure: isProd || isHttps,
       sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days

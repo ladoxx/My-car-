@@ -1,23 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import jwt from 'jsonwebtoken';
+import { getAdminSession } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fmkal-vehicle-secret-key-super-secure';
 
 export async function POST(req: NextRequest) {
   try {
     // 1. Authenticate Admin
-    const token = req.cookies.get('admin_session')?.value;
-    if (!token) {
+    const session = await getAdminSession();
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized: Please login' }, { status: 401 });
-    }
-
-    try {
-      jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Invalid or expired session' }, { status: 401 });
     }
 
     // 2. Parse Multipart Form

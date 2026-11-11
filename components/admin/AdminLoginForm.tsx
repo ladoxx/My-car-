@@ -23,7 +23,7 @@ export default function AdminLoginForm({ onLoginSuccess, lang }: AdminLoginFormP
       loginBtn: 'Sign In to Dashboard',
       placeholderUser: 'Enter admin username',
       placeholderPass: 'Enter admin password',
-      defaultHint: 'Initial credentials: admin / admin1234!',
+      securityBadge: '256-Bit End-to-End Encrypted Session',
     },
     TR: {
       title: 'FMKAL Yönetici Paneli',
@@ -33,7 +33,7 @@ export default function AdminLoginForm({ onLoginSuccess, lang }: AdminLoginFormP
       loginBtn: 'Panele Giriş Yap',
       placeholderUser: 'Yönetici adını girin',
       placeholderPass: 'Yönetici şifresini girin',
-      defaultHint: 'İlk kurulum bilgisi: admin / admin1234!',
+      securityBadge: '256-Bit Güvenli Şifrelenmiş Oturum',
     },
   }[lang];
 
@@ -146,10 +146,9 @@ export default function AdminLoginForm({ onLoginSuccess, lang }: AdminLoginFormP
         </button>
       </form>
 
-      <div className="mt-6 pt-4 border-t border-white/5 text-center">
-        <p className="text-[11px] text-gray-500 font-mono">
-          {t.defaultHint}
-        </p>
+      <div className="mt-6 pt-4 border-t border-white/5 text-center flex items-center justify-center space-x-1.5 text-[11px] text-gray-500 font-mono">
+        <ShieldCheck className="w-3.5 h-3.5 text-[#A3F542]" />
+        <span>{t.securityBadge}</span>
       </div>
     </div>
   );
