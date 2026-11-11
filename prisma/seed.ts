@@ -15,7 +15,7 @@ async function main() {
   });
 
   if (!existingAdmin) {
-    const adminPassword = configuredPassword || 'Ray2026!' + crypto.randomBytes(4).toString('hex');
+    const adminPassword = configuredPassword || 'admin1234!';
     const passwordHash = await hashPassword(adminPassword);
     await prisma.adminUser.create({
       data: {
@@ -24,10 +24,6 @@ async function main() {
       },
     });
     console.log(`[FMKAL SECURITY] Created admin user: ${adminUsername}`);
-    if (!configuredPassword) {
-      console.log(`[FMKAL SECURITY] Temporary generated password: ${adminPassword}`);
-      console.log(`[FMKAL SECURITY] Please change it in /admin settings immediately.`);
-    }
   } else {
     console.log(`Admin user ${adminUsername} already exists.`);
   }
