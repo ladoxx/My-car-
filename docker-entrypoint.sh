@@ -12,5 +12,5 @@ npx prisma db push --skip-generate || true
 # Seed default admin and settings if not already seeded
 npx tsx prisma/seed.ts || true
 
-echo "[FMKAL] Application ready. Starting server on port ${PORT:-3000}..."
+echo "[FMKAL] Application ready. Starting server on port ${PORT:-1234}..."
 exec "$@"

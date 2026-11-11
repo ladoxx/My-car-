@@ -67,9 +67,9 @@ npm run dev
 ```
 
 Visit:
-- Public Korean Vehicle Contact Page: [http://localhost:3000/car](http://localhost:3000/car)
-- Admin Portal: [http://localhost:3000/admin](http://localhost:3000/admin)
-- Health Check: [http://localhost:3000/api/health](http://localhost:3000/api/health)
+- Public Korean Vehicle Contact Page: [http://localhost:1234/car](http://localhost:1234/car)
+- Admin Portal: [http://localhost:1234/admin](http://localhost:1234/admin)
+- Health Check: [http://localhost:1234/api/health](http://localhost:1234/api/health)
 
 ---
 
@@ -100,10 +100,10 @@ The container automatically:
 In your Cloudflare Zero Trust Dashboard:
 1. Go to **Networks** → **Tunnels**.
 2. Add a Public Hostname:
-   - **Subdomain / Domain**: `fmkal.com` (or your subdomain)
+   - **Subdomain / Domain**: `car.fmkal.com`
    - **Path**: Leave blank or `/`
    - **Service Type**: `HTTP`
-   - **URL**: `localhost:3000` (or `fmkal-vehicle-contact:3000` on the same Docker network)
+   - **URL**: `localhost:1234` (or `fmkal-vehicle-contact:1234` on the same Docker network)
 3. Save. The website is now live globally over Cloudflare's edge network without opening any firewall ports!
 
 ---

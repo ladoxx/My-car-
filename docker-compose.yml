@@ -6,10 +6,10 @@ services:
     container_name: fmkal-vehicle-contact
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "1234:1234"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=1234
       - DATABASE_URL=file:/app/data/prod.db
       - JWT_SECRET=${JWT_SECRET:-}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
@@ -18,7 +18,7 @@ services:
       - fmkal-data:/app/data
       - fmkal-uploads:/app/public/uploads
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:1234/api/health"]
       interval: 30s
       timeout: 5s
       retries: 3
