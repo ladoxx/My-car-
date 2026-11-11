@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, ChevronRight, Shield, Check, Copy, Lock, QrCode, Smartphone, EyeOff } from 'lucide-react';
+import { Phone, ChevronRight, Shield, Check, Copy, Lock, QrCode, Smartphone, EyeOff, ExternalLink } from 'lucide-react';
 import KiaRayVisual from '@/components/KiaRayVisual';
 import { WhatsAppIcon } from '@/components/icons/ContactIcons';
 import { CarOutlineIcon, HandshakeIcon } from '@/components/KiaRayBrand';
@@ -247,7 +247,19 @@ export default function VehicleContactClient({
         </motion.div>
 
         {/* Footer */}
-        <footer className="w-full max-w-[420px] flex flex-col items-center text-center z-10 pt-4">
+        <footer className="w-full max-w-[420px] flex flex-col items-center text-center z-10 pt-4 space-y-2.5">
+          <a
+            href="https://fmkal.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#A3F542]/10 hover:bg-[#A3F542]/20 border border-[#A3F542]/30 text-xs text-white transition-all font-mono shadow-md"
+          >
+            <span>🌐</span>
+            <span className="font-bold text-[#A3F542]">fmkal.com</span>
+            <span className="text-[10px] text-gray-300 font-sans font-medium">공식 홈페이지</span>
+            <ExternalLink className="w-3 h-3 text-[#A3F542]" />
+          </a>
+
           <div className="flex items-center space-x-2 text-[10px] tracking-widest text-gray-500 uppercase font-mono">
             <span>FMKAL · VEHICLE CONTACT</span>
             <span>•</span>
@@ -480,10 +492,53 @@ export default function VehicleContactClient({
             </div>
           )}
         </section>
+
+        {/* Main Website Promotion Banner (fmkal.com) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="w-full mt-5 px-1"
+        >
+          <a
+            href="https://fmkal.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block w-full p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-black/80 via-[#10151C]/90 to-black/80 border border-[#A3F542]/30 hover:border-[#A3F542] shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_10px_30px_rgba(163,245,66,0.15)] transition-all relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-28 h-28 bg-[#A3F542]/10 rounded-full blur-2xl pointer-events-none group-hover:bg-[#A3F542]/20 transition-all" />
+
+            <div className="flex items-center justify-between relative z-10">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-[#A3F542]/15 border border-[#A3F542]/40 text-[#A3F542] flex items-center justify-center text-lg font-bold shadow-inner group-hover:scale-105 transition-transform shrink-0">
+                  🌐
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs sm:text-sm font-extrabold text-white group-hover:text-[#A3F542] transition-colors">
+                      FMKAL 공식 웹사이트
+                    </span>
+                    <span className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded bg-[#A3F542] text-black">
+                      OFFICIAL
+                    </span>
+                  </div>
+                  <div className="text-xs font-mono font-semibold text-gray-400 group-hover:text-gray-200 transition-colors flex items-center space-x-1 mt-0.5">
+                    <span>https://fmkal.com</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-1 text-[#A3F542] text-xs font-bold pl-2 shrink-0">
+                <span className="hidden xs:inline">바로가기</span>
+                <ExternalLink className="w-4 h-4 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </div>
+          </a>
+        </motion.div>
       </div>
 
       {/* Footer Section */}
-      <footer className="w-full max-w-[420px] mx-auto mt-8 pt-4 pb-1 flex flex-col items-center text-center z-10 relative">
+      <footer className="w-full max-w-[420px] mx-auto mt-6 pt-4 pb-1 flex flex-col items-center text-center z-10 relative">
         {/* Handshake Icon in Neon Green */}
         <div className="w-8 h-8 rounded-full flex items-center justify-center text-[#A3F542] mb-1.5 drop-shadow-[0_0_8px_rgba(163,245,66,0.5)]">
           <HandshakeIcon className="w-6 h-6" />
@@ -494,9 +549,18 @@ export default function VehicleContactClient({
           {settings.footerNote || '빠른 연락에 감사드립니다.'}
         </p>
 
-        {/* Branding & Admin Key */}
+        {/* Branding, Official Web Link & Admin Key */}
         <div className="flex items-center justify-center space-x-2 text-[10px] tracking-widest text-gray-400 uppercase font-mono">
-          <span>{settings.footerBranding || 'FMKAL · VEHICLE CONTACT'}</span>
+          <a
+            href="https://fmkal.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#A3F542] transition-colors"
+          >
+            FMKAL.COM
+          </a>
+          <span>•</span>
+          <span>{settings.footerBranding || 'VEHICLE CONTACT'}</span>
           <span>•</span>
           <a
             href="/admin"

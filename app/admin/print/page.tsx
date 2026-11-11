@@ -269,9 +269,16 @@ export default function AdminPrintPage() {
 
               {/* Bottom Footer Row */}
               <div className="flex items-center justify-between pt-4 mt-2 border-t border-white/10 text-xs">
-                <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-200 font-mono">
-                  <span className="text-[#A3F542]">🔗</span>
-                  <span className="font-bold">{cardDisplayUrl}</span>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-200 font-mono">
+                    <span className="text-[#A3F542]">🔗</span>
+                    <span className="font-bold">{cardDisplayUrl}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#A3F542]/10 border border-[#A3F542]/30 text-white font-mono">
+                    <span>🌐</span>
+                    <span className="font-bold text-[#A3F542]">fmkal.com</span>
+                    <span className="text-[10px] text-gray-400 font-sans font-medium">(공식 웹)</span>
+                  </div>
                 </div>
 
                 <div className="flex items-center space-x-2 text-gray-200">
@@ -317,9 +324,16 @@ export default function AdminPrintPage() {
                     </p>
                   </div>
 
-                  <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300 font-mono">
-                    <span className="text-[#A3F542]">🔗</span>
-                    <span>{cardDisplayUrl}</span>
+                  <div className="flex flex-col space-y-2 pt-1">
+                    <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300 font-mono w-fit">
+                      <span className="text-[#A3F542]">🔗</span>
+                      <span>{cardDisplayUrl}</span>
+                    </div>
+                    <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-[#A3F542]/10 border border-[#A3F542]/30 text-xs text-white font-mono w-fit">
+                      <span>🌐</span>
+                      <span className="font-bold text-[#A3F542]">fmkal.com</span>
+                      <span className="text-[10px] text-gray-400 font-sans font-medium">공식 사이트</span>
+                    </div>
                   </div>
                 </div>
 

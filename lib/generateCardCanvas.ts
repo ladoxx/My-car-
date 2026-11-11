@@ -243,29 +243,52 @@ export async function generateAcrylicCardPng(
   ctx.fillText('›', rightX + rowW - 60, rowY + 82);
 
   // 5. Bottom Footer
+  // Badge 1: Vehicle Link (car.fmkal.com)
   ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.roundRect(90, height - 130, 440, 68, 34);
+  ctx.roundRect(90, height - 130, 400, 68, 34);
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = '#A3F542';
   ctx.font = 'bold 24px sans-serif';
-  ctx.fillText('🔗', 125, height - 88);
+  ctx.fillText('🔗', 120, height - 88);
 
   ctx.fillStyle = '#E2E8F0';
-  ctx.font = '700 28px monospace';
-  ctx.fillText(targetUrlText.replace(/^https?:\/\//, '').replace(/\/+$/, ''), 175, height - 87);
+  ctx.font = '700 26px monospace';
+  ctx.fillText(targetUrlText.replace(/^https?:\/\//, '').replace(/\/+$/, ''), 165, height - 87);
+
+  // Badge 2: Main Website (fmkal.com)
+  ctx.fillStyle = 'rgba(163, 245, 66, 0.12)';
+  ctx.strokeStyle = 'rgba(163, 245, 66, 0.4)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(510, height - 130, 440, 68, 34);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 24px sans-serif';
+  ctx.fillText('🌐', 540, height - 88);
 
   ctx.fillStyle = '#A3F542';
-  ctx.font = 'bold 36px sans-serif';
-  ctx.fillText('🤝', 960, height - 87);
+  ctx.font = '800 26px monospace';
+  ctx.fillText('fmkal.com', 585, height - 87);
+
+  ctx.fillStyle = '#94A3B8';
+  ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Pretendard Variable", sans-serif';
+  ctx.fillText('(공식 웹)', 750, height - 87);
+
+  // Thank You Greeting
+  ctx.fillStyle = '#A3F542';
+  ctx.font = 'bold 34px sans-serif';
+  ctx.fillText('🤝', 1000, height - 87);
 
   ctx.fillStyle = '#E2E8F0';
-  ctx.font = '700 34px -apple-system, BlinkMacSystemFont, "Pretendard Variable", sans-serif';
-  ctx.fillText('빠른 연락에 감사드립니다.', 1020, height - 86);
+  ctx.font = '700 32px -apple-system, BlinkMacSystemFont, "Pretendard Variable", sans-serif';
+  ctx.fillText('빠른 연락에 감사드립니다.', 1055, height - 86);
 
   ctx.strokeStyle = '#A3F542';
   ctx.lineWidth = 4;
@@ -353,22 +376,49 @@ export async function generateHorizontalCardPng(
   ctx.fillText('차량 이동이 필요하거나 긴급한 연락이 필요하시면', 100, 465);
   ctx.fillText('QR 코드를 스캔하거나 아래 방법으로 연락해 주세요.', 100, 510);
 
-  // URL Badge on Left
+  // URL Badges on Left
+  // Badge 1: Vehicle Contact URL (car.fmkal.com)
   ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.roundRect(100, 570, 440, 68, 34);
+  ctx.roundRect(100, 560, 460, 58, 29);
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = '#A3F542';
-  ctx.font = 'bold 24px sans-serif';
-  ctx.fillText('🔗', 135, 612);
+  ctx.font = 'bold 22px sans-serif';
+  ctx.fillText('🔗', 130, 597);
 
   ctx.fillStyle = '#E2E8F0';
-  ctx.font = '700 28px monospace';
-  ctx.fillText(targetUrlText.replace(/^https?:\/\//, '').replace(/\/+$/, ''), 185, 613);
+  ctx.font = '700 24px monospace';
+  ctx.fillText(targetUrlText.replace(/^https?:\/\//, '').replace(/\/+$/, ''), 172, 597);
+
+  // Badge 2: Main Website Promotion (fmkal.com)
+  ctx.fillStyle = 'rgba(163, 245, 66, 0.12)';
+  ctx.strokeStyle = 'rgba(163, 245, 66, 0.4)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(100, 630, 460, 58, 29);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 22px sans-serif';
+  ctx.fillText('🌐', 130, 667);
+
+  ctx.fillStyle = '#A3F542';
+  ctx.font = '800 24px monospace';
+  ctx.fillText('fmkal.com', 172, 667);
+
+  // Official tag pill
+  ctx.fillStyle = 'rgba(163, 245, 66, 0.25)';
+  ctx.beginPath();
+  ctx.roundRect(330, 644, 115, 30, 15);
+  ctx.fill();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '700 16px -apple-system, BlinkMacSystemFont, "Pretendard Variable", sans-serif';
+  ctx.fillText('공식 사이트', 345, 665);
 
   // 3. Right: Big High-Resolution QR Code (No car image)
   try {
