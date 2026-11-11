@@ -18,11 +18,11 @@ services:
       - fmkal-data:/app/data
       - fmkal-uploads:/app/public/uploads
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:1234/api/health"]
-      interval: 30s
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:1234/api/health || exit 1"]
+      interval: 15s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 20s
 
 volumes:
   fmkal-data:
