@@ -1,20 +1,8 @@
 import { prisma } from './db';
 
-const MAX_FAILED_ATTEMPTS = 5;
-const WINDOW_MINUTES = 15;
-
-export async function isRateLimited(ip: string): Promise<boolean> {
-  const windowStart = new Date(Date.now() - WINDOW_MINUTES * 60 * 1000);
-
-  const failedCount = await prisma.loginAttempt.count({
-    where: {
-      ip,
-      success: false,
-      createdAt: { gte: windowStart },
-    },
-  });
-
-  return failedCount >= MAX_FAILED_ATTEMPTS;
+// IP rate-limiting disabled to avoid blocking legitimate tunnel traffic (Cloudflare Tunnel / reverse proxies)
+export async function isRateLimited(_ip: string): Promise<boolean> {
+  return false;
 }
 
 export async function recordLoginAttempt(ip: string, success: boolean): Promise<void> {
