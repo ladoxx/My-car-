@@ -1,0 +1,66 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model VehicleContactSettings {
+  id              String   @id @default("default")
+  carModel        String   @default("기아 레이 (Kia Ray)")
+  licensePlate    String   @default("FMKAL")
+  status          String   @default("available") // "available", "away", "quick_move"
+  statusText      String   @default("연락 가능 · 통화 및 메시지 가능")
+  headline        String   @default("차량 연락 센터")
+  greeting        String   @default("안녕하세요!")
+  subGreeting     String   @default("차량 관련 문의가 있으신가요?")
+  bodyText        String   @default("차량 이동이 필요하거나 긴급한 연락이 필요하시면 아래 방법으로 연락해 주세요.")
+  footerNote      String   @default("빠른 연락에 감사드립니다.")
+  footerBranding  String   @default("FMKAL · VEHICLE CONTACT")
+  
+  phoneEnabled    Boolean  @default(true)
+  phoneNumber     String   @default("010-0000-0000")
+  
+  whatsAppEnabled Boolean  @default(true)
+  whatsAppNumber  String   @default("+821000000000")
+  whatsAppMessage String   @default("안녕하세요. 차량 관련하여 연락드립니다.")
+  
+  kakaoTalkEnabled Boolean @default(true)
+  kakaoTalkUrl     String  @default("")
+  
+  vehicleImageUrl  String  @default("")
+  baseUrl          String  @default("https://car.fmkal.com")
+  qrOnlyAccess     Boolean @default(true)
+  
+  updatedAt        DateTime @updatedAt
+}
+
+model AnalyticsEvent {
+  id         String   @id @default(cuid())
+  type       String   // "page_view", "qr_scan", "click_whatsapp", "click_kakaotalk", "click_phone"
+  deviceType String?  // "ios", "android", "desktop", "other"
+  source     String?  // "qr", "direct"
+  createdAt  DateTime @default(now())
+
+  @@index([type])
+  @@index([createdAt])
+}
+
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  ip        String
+  success   Boolean
+  createdAt DateTime @default(now())
+
+  @@index([ip, createdAt])
+}

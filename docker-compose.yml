@@ -1,0 +1,28 @@
+services:
+  fmkal-vehicle-contact:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fmkal-vehicle-contact
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=file:/app/data/prod.db
+      - JWT_SECRET=${JWT_SECRET:-fmkal-prod-secret-change-this-random-key-2026}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin1234!}
+    volumes:
+      - fmkal-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  fmkal-data:
+    driver: local

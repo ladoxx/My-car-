@@ -1,0 +1,170 @@
+import fs from 'fs';
+import path from 'path';
+
+const publicDir = path.join(process.cwd(), 'public');
+const presetsDir = path.join(publicDir, 'presets');
+const uploadsDir = path.join(publicDir, 'uploads');
+
+if (!fs.existsSync(presetsDir)) fs.mkdirSync(presetsDir, { recursive: true });
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+// Copy base cut as white preset if not exists
+const whitePreset = path.join(presetsDir, 'kia-ray-white.jpg');
+const baseCut = path.join(publicDir, 'kia-ray-car-cut.jpg');
+if (fs.existsSync(baseCut)) {
+  fs.copyFileSync(baseCut, whitePreset);
+}
+
+// Create an SVG-based Cyber Neon preset
+const cyberSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <defs>
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="cyber-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#25D366" />
+      <stop offset="50%" stop-color="#A3F542" />
+      <stop offset="100%" stop-color="#00F0FF" />
+    </linearGradient>
+    <radialGradient id="underglow" cx="50%" cy="85%" r="45%">
+      <stop offset="0%" stop-color="#A3F542" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#06080A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="600" height="380" fill="transparent" />
+  <ellipse cx="300" cy="330" rx="220" ry="24" fill="url(#underglow)" />
+
+  <!-- Kia Ray Boxy Outline -->
+  <g filter="url(#neon-glow)" stroke="url(#cyber-grad)" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Roof & Windshield -->
+    <path d="M 175 110 L 425 110 C 435 110 445 118 448 130 L 468 200 C 475 205 480 215 482 225 L 485 270 C 485 285 475 295 460 295 L 140 295 C 125 295 115 285 115 270 L 118 225 C 120 215 125 205 132 200 L 152 130 C 155 118 165 110 175 110 Z" />
+    <!-- Windshield glass -->
+    <path d="M 185 125 L 415 125 L 440 195 L 160 195 Z" stroke-width="2" opacity="0.8" />
+    <!-- Center Grille & Emblem area -->
+    <rect x="220" y="215" width="160" height="30" rx="8" stroke-width="2.5" />
+    <text x="300" y="235" font-family="sans-serif" font-weight="900" font-size="14" fill="#A3F542" text-anchor="middle" letter-spacing="3">KIA</text>
+    <!-- Left Headlight -->
+    <rect x="145" y="215" width="55" height="42" rx="10" stroke-width="3" />
+    <circle cx="172" cy="236" r="10" stroke-width="2.5" />
+    <!-- Right Headlight -->
+    <rect x="400" y="215" width="55" height="42" rx="10" stroke-width="3" />
+    <circle cx="428" cy="236" r="10" stroke-width="2.5" />
+    <!-- Lower bumper intake -->
+    <rect x="200" y="260" width="200" height="22" rx="6" stroke-width="2" />
+    <!-- Fog lights -->
+    <circle cx="155" cy="275" r="6" stroke-width="2" />
+    <circle cx="445" cy="275" r="6" stroke-width="2" />
+    <!-- Side Mirrors -->
+    <path d="M 148 185 L 115 180 L 112 198 L 142 195 Z" stroke-width="2" />
+    <path d="M 452 185 L 485 180 L 488 198 L 458 195 Z" stroke-width="2" />
+  </g>
+  <!-- Speed lines -->
+  <line x1="80" y1="310" x2="520" y2="310" stroke="#A3F542" stroke-width="2" opacity="0.6" stroke-dasharray="8 8" />
+</svg>`;
+
+fs.writeFileSync(path.join(presetsDir, 'kia-ray-cyber.svg'), cyberSvg);
+
+// Create Dark Stealth Edition SVG
+const darkSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <defs>
+    <filter id="stealth-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <radialGradient id="dark-underglow" cx="50%" cy="85%" r="50%">
+      <stop offset="0%" stop-color="#A3F542" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#06080A" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="body-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E232B" />
+      <stop offset="100%" stop-color="#0B0D12" />
+    </linearGradient>
+  </defs>
+  <ellipse cx="300" cy="335" rx="230" ry="25" fill="url(#dark-underglow)" />
+
+  <!-- Shadow / Body Silhouette -->
+  <path d="M 175 110 L 425 110 C 435 110 445 118 448 130 L 468 200 C 475 205 480 215 482 225 L 485 270 C 485 285 475 295 460 295 L 140 295 C 125 295 115 285 115 270 L 118 225 C 120 215 125 205 132 200 L 152 130 C 155 118 165 110 175 110 Z" fill="url(#body-grad)" stroke="#334155" stroke-width="2.5" />
+
+  <!-- Tinted windshield -->
+  <path d="M 185 125 L 415 125 L 440 195 L 160 195 Z" fill="#0A0C10" stroke="#1E293B" stroke-width="2" />
+
+  <!-- Luminous LED Headlights (Night Stealth Ray) -->
+  <g filter="url(#stealth-glow)">
+    <rect x="145" y="215" width="55" height="42" rx="10" fill="#0E1218" stroke="#A3F542" stroke-width="3" />
+    <circle cx="172" cy="236" r="10" fill="#A3F542" opacity="0.9" />
+    <circle cx="172" cy="236" r="4" fill="#FFFFFF" />
+
+    <rect x="400" y="215" width="55" height="42" rx="10" fill="#0E1218" stroke="#A3F542" stroke-width="3" />
+    <circle cx="428" cy="236" r="10" fill="#A3F542" opacity="0.9" />
+    <circle cx="428" cy="236" r="4" fill="#FFFFFF" />
+  </g>
+
+  <!-- Grille & KIA script -->
+  <rect x="220" y="215" width="160" height="30" rx="8" fill="#090B0E" stroke="#1E293B" stroke-width="2" />
+  <text x="300" y="235" font-family="sans-serif" font-weight="900" font-size="13" fill="#E2E8F0" text-anchor="middle" letter-spacing="4">KIA</text>
+
+  <!-- Lower Neon Light Bar -->
+  <rect x="200" y="260" width="200" height="12" rx="4" fill="#0E1217" stroke="#334155" stroke-width="1.5" />
+  <line x1="210" y1="266" x2="390" y2="266" stroke="#A3F542" stroke-width="2" opacity="0.8" />
+</svg>`;
+
+fs.writeFileSync(path.join(presetsDir, 'kia-ray-dark.svg'), darkSvg);
+
+// Create Silver/Titanium Edition SVG
+const silverSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <defs>
+    <filter id="silver-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <radialGradient id="silver-underglow" cx="50%" cy="85%" r="50%">
+      <stop offset="0%" stop-color="#25D366" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#06080A" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="silver-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F1F5F9" />
+      <stop offset="50%" stop-color="#94A3B8" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+  </defs>
+  <ellipse cx="300" cy="335" rx="230" ry="25" fill="url(#silver-underglow)" />
+
+  <!-- Metallic Body -->
+  <path d="M 175 110 L 425 110 C 435 110 445 118 448 130 L 468 200 C 475 205 480 215 482 225 L 485 270 C 485 285 475 295 460 295 L 140 295 C 125 295 115 285 115 270 L 118 225 C 120 215 125 205 132 200 L 152 130 C 155 118 165 110 175 110 Z" fill="url(#silver-grad)" stroke="#CBD5E1" stroke-width="2.5" />
+
+  <!-- Windshield -->
+  <path d="M 185 125 L 415 125 L 440 195 L 160 195 Z" fill="#0F172A" stroke="#334155" stroke-width="2" />
+
+  <!-- Headlights -->
+  <g filter="url(#silver-glow)">
+    <rect x="145" y="215" width="55" height="42" rx="10" fill="#1E293B" stroke="#A3F542" stroke-width="3" />
+    <circle cx="172" cy="236" r="10" fill="#38BDF8" opacity="0.9" />
+    <circle cx="172" cy="236" r="4" fill="#FFFFFF" />
+
+    <rect x="400" y="215" width="55" height="42" rx="10" fill="#1E293B" stroke="#A3F542" stroke-width="3" />
+    <circle cx="428" cy="236" r="10" fill="#38BDF8" opacity="0.9" />
+    <circle cx="428" cy="236" r="4" fill="#FFFFFF" />
+  </g>
+
+  <!-- Grille -->
+  <rect x="220" y="215" width="160" height="30" rx="8" fill="#1E293B" stroke="#475569" stroke-width="2" />
+  <text x="300" y="235" font-family="sans-serif" font-weight="900" font-size="13" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">KIA</text>
+
+  <!-- Lower intake -->
+  <rect x="200" y="260" width="200" height="15" rx="4" fill="#0F172A" stroke="#475569" stroke-width="1.5" />
+</svg>`;
+
+fs.writeFileSync(path.join(presetsDir, 'kia-ray-silver.svg'), silverSvg);
+
+console.log('Vehicle presets successfully created in public/presets/');
