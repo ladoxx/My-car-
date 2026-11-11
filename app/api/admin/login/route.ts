@@ -54,8 +54,17 @@ export async function POST(req: NextRequest) {
 
     let isValid = await verifyPassword(password, user.passwordHash);
 
-    // Initial password rescue: allow default 'admin1234!' or process.env.ADMIN_PASSWORD to sync/authenticate
-    if (!isValid && (password === 'admin1234!' || (process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD))) {
+    // Initial password rescue ONLY if the password has NEVER been changed by the user in /admin
+    const isFirstTimePassword =
+      user.createdAt &&
+      user.updatedAt &&
+      Math.abs(new Date(user.updatedAt).getTime() - new Date(user.createdAt).getTime()) < 3000;
+
+    if (
+      !isValid &&
+      isFirstTimePassword &&
+      (password === 'admin1234!' || (process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD))
+    ) {
       const newHash = await hashPassword(password);
       await prisma.adminUser.update({
         where: { id: user.id },
